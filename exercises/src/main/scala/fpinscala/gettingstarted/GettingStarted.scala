@@ -121,12 +121,13 @@ object MonomorphicBinarySearch {
       else {
         val mid2 = (low + high) / 2
         val d = ds(mid2) // We index into an array using the same
-                         // syntax as function application
+        // syntax as function application
         if (d == key) mid2
-        else if (d > key) go(low, mid2, mid2-1)
+        else if (d > key) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
       }
     }
+
     go(0, 0, ds.length - 1)
   }
 
@@ -154,7 +155,16 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+    //traverse , take 2 element
+    @annotation.tailrec
+    def go(arr:Array[A], n1:Int, n2:Int): Boolean ={
+      if(n2 > arr.length-1) true
+      else if(!gt(arr(n1), arr(n2))) false
+      else go(arr, n1+1, n2+1)
+    }
+    go(as, 0, 1)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
@@ -167,7 +177,7 @@ object PolymorphicFunctions {
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+    (a:A) => ((b:B) => f(a,b))
 
   // NB: The `Function2` trait has a `curried` method already
 
